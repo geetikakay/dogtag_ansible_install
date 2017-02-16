@@ -1,4 +1,0 @@
-# Git clone and install ipa-pytests on all SUT
-- hosts: clone
-  roles:
-  - clone

@@ -1,3 +1,0 @@
-- name: Copy CS9 and DS10 Puddle repo 
-  copy: src=cs-ds-puddle.repo dest=/etc/yum.repos.d/cs-ds-puddle.repo
-  tags: platform-ci

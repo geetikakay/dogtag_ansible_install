@@ -1,5 +1,0 @@
-[restraint]
-name=Restraint
-baseurl=http://bpeck.fedorapeople.org/restraint/rhel$releasever
-enabled=1
-gpgcheck=0

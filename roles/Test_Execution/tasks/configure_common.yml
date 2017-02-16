@@ -28,19 +28,6 @@
     - expect
   tags: platform-ci
 
-- name: Check for Removed dependency from mod_revocator and mod_nss.If failes refer BZ 1295276 
-  command: rpm -q {{item}}
-  with_items:
-    - mod_revocator
-    - mod_nss
-  register: rpm_check
-  failed_when: "rpm_check.rc == 0"
-
-- name: Check for Removed dependency of perl from pki-server.If failes refer BZ 1305769
-  command: rpm -qR pki-server | grep perl
-  register: rpm_check
-  failed_when: "rpm_check.rc == 0"
-
 - name: Copying templates to /tmp folder
   copy : src=/tmp/test_dir  dest=/tmp/
   tags: platform-ci

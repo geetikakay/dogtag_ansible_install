@@ -1,3 +1,0 @@
-- name : fetch file from master to local environment before running tests
-  fetch: src=/tmp/ansible_constants.py dest=/tmp flat=yes validate_checksum=no
-  tags: platform-ci
