@@ -1,0 +1,67 @@
+- name: Copy CS9 and DS10 Puddle repo 
+  copy: src=cs-ds-puddle.repo dest=/etc/yum.repos.d/cs-ds-puddle.repo
+  tags: platform-ci
+ 
+- name : Set hostname for machines Bydefault we choose pki1 for master and pki2.. for clones.
+  hostname: name=pki1.example.com
+  tags: platform-ci
+
+- name : Modify hostname for master in  /etc/hosts
+  lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' create=yes insertafter=EOF line="{{item}} {{ansible_fqdn}}" state=present
+  when: hostvars[item].ansible_default_ipv4.address is defined
+  with_items: play_hosts
+  tags: platform-ci
+
+- name : fetch file in  master in  /etc/hosts
+  fetch: src=/etc/hosts dest=/etc flat=yes validate_checksum=no
+  tags: platform-ci
+  
+- name: Install list of packages for CS Master
+  yum : pkg={{item}} state=latest
+  with_items:
+    - redhat-pki
+    - redhat-pki-console-theme
+    - redhat-pki-server-theme
+    - pki-console
+    - 389-ds-base
+    - policycoreutils-python
+    - expect
+  tags: platform-ci
+
+- name: Check for Removed dependency from mod_revocator and mod_nss.If failes refer BZ 1295276 
+  command: rpm -q {{item}}
+  with_items:
+    - mod_revocator
+    - mod_nss
+  register: rpm_check
+  failed_when: "rpm_check.rc == 0"
+
+- name: Check for Removed dependency of perl from pki-server.If failes refer BZ 1305769
+  command: rpm -qR pki-server | grep perl
+  register: rpm_check
+  failed_when: "rpm_check.rc == 0"
+
+- name: Copying templates to /tmp folder
+  copy : src=/tmp/test_dir  dest=/tmp/
+  tags: platform-ci
+
+- name: Replace ServerName in all configuration files.
+  replace: dest={{item}} regexp="SERVERNAME" replace={{ansible_fqdn}}
+  with_items:
+  - /tmp/test_dir/ldap.cfg
+  - /tmp/test_dir/ca.cfg
+  - /tmp/test_dir/kra.cfg
+  - /tmp/test_dir/ocsp.cfg
+  - /tmp/test_dir/tks.cfg
+  - /tmp/test_dir/tps.cfg
+
+- name: Replace ServerName in all configuration files.
+  replace: dest={{item}} regexp="SERVERNAME" replace={{ansible_fqdn}}
+  with_items:
+  - /tmp/test_dir/ldap_kra.cfg
+  - /tmp/test_dir/ldap_ocsp.cfg
+  - /tmp/test_dir/ldap_tks.cfg
+  - /tmp/test_dir/ldap_tps.cfg
+  when: topology  == "topology-05"
+
+

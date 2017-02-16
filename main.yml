@@ -1,0 +1,10 @@
+# Configure cosmos repo and install all pre-requisites on Jenkins slave.
+# Git clone and install ipa-pytests on Jenkins slave.
+- hosts: localhost
+  roles:
+  - mywork_local
+
+# Git clone and install ipa-pytests on all SUT
+- hosts: master
+  roles:
+  - mywork_remote

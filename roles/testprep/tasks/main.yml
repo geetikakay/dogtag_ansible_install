@@ -1,0 +1,7 @@
+- name: Update ansible_inventory.txt with master and clone tags
+  command: "{{ ansible_env.WORKSPACE }}/pki-tests/ci/disposables/update_inventory.py {{ ansible_env.WORKSPACE  }}/ansible_inventory.txt"
+  tags: platform-ci
+
+- name: Update inventory
+  meta: refresh_inventory
+  tags: platform-ci

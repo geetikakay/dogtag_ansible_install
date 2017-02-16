@@ -1,0 +1,27 @@
+
+- name: Replace CA specific changes 
+  replace: dest={{item}} regexp="capki_https_port" replace={{capki_https_port}}
+  with_items:
+  - /tmp/ca.cfg
+  - /tmp/ansible_constants.py
+
+- name: Replace http port for CA.
+  replace: dest={{item}} regexp="capki_http_port" replace={{capki_http_port}}
+  with_items:
+  - /tmp/ca.cfg
+  - /tmp/ansible_constants.py
+
+- name: Replace ajp port for CA
+  replace: dest={{item}} regexp="capki_ajp_port" replace={{capki_ajp_port}}
+  with_items:
+  - /tmp/ca.cfg
+  - /tmp/ansible_constants.py
+
+- name : Replace tomcat port for CA
+  replace: dest={{item}} regexp="capki_tomcat_server_port" replace={{capki_tomcat_server_port}}
+  with_items:
+  - /tmp/ca.cfg
+  - /tmp/ansible_constants.py
+
+- name: Install CA master
+  shell: pkispawn -s CA -f /tmp/ca.cfg

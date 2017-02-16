@@ -1,0 +1,53 @@
+- name: Create IDM QE extras repo
+  copy: src=idmqe-extras-rhel.repo dest=/etc/yum.repos.d/idmqe-extras-rhel.repo
+
+- name: Installing pre-requisites
+  yum: name={{ item }} state=latest
+  with_items:
+    - koji
+    - vim
+    - git
+    - pylint
+    - python-ldap
+    - PyYAML
+    - pytest
+    - python-paramiko
+    - python-coverage
+    - python-requests
+    - python-pytest-beakerlib
+    - python-pytest-multihost
+    - python-pytest-sourceorder
+    - pki-testlib
+
+- name: GIT clone pki-tests repository
+  git: repo=git://git.app.eng.bos.redhat.com/pki-tests.git
+       dest={{ ansible_env.WORKSPACE }}/pki-tests
+
+- name: Update ansible_inventory.txt and multihost plugin config yaml
+  command: "{{ ansible_env.WORKSPACE }}/pki-tests/ci/disposables/inventory_to_multihost.py {{ ansible_env.WORKSPACE
+  }}/ansible_inventory.txt {{ ansible_env.WORKSPACE }}/{{ ansible_env.CFG}}"
+
+- name: Run py.test
+  command: "py.test -v --color=yes --junit-xml={{ ansible_env.WORKSPACE }}/{{ ansible_env.JUNIT_XML }}
+  --multihost-config={{ ansible_env.WORKSPACE }}/{{ ansible_env.CFG }}
+  {{ ansible_env.WORKSPACE }}/{{ ansible_env.TEST_SUITE }}"
+
+
+# Tasks to setup jenkins slave when used with platform-ci framework.
+- name: Copy RHEL restraint repo
+  copy: src=rhel-restraint.repo dest=/etc/yum.repos.d/restraint.repo
+  when: ansible_distribution == 'RedHat'
+  tags: platform-ci
+
+- name: Copy Fedora restraint repo
+  copy: src=fedora-restraint.repo dest=/etc/yum.repos.d/restraint.repo
+  when: ansible_distribution == 'Fedora'
+  tags: platform-ci
+
+- name: Install packages for platform-ci
+  yum: name={{ item }} state=latest
+  with_items:
+    - koji
+    - wget
+    - restraint-client
+  tags: platform-ci

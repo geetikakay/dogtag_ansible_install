@@ -1,0 +1,2 @@
+- name: Install CA master
+  shell: pkispawn -s CA -f /tmp/test_dir/ca.cfg

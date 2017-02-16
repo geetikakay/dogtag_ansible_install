@@ -1,0 +1,32 @@
+- name: Replace Clone TKS specific changes 
+  replace: dest={{item}} regexp="tkspki_https_port" replace={{tkspki_https_port}}
+  with_items:
+  - /tmp/tks_clone.cfg
+  - /tmp/ansible_constants.py
+
+- name: Replace http port for Clone TKS.
+  replace: dest={{item}} regexp="tkspki_http_port" replace={{tkspki_http_port}}
+  with_items:
+  - /tmp/tks_clone.cfg
+  - /tmp/ansible_constants.py
+
+- name: Replace ajp port for Clone TKS
+  replace: dest={{item}} regexp="tkspki_ajp_port" replace={{tkspki_ajp_port}}
+  with_items:
+  - /tmp/tks_clone.cfg
+  - /tmp/ansible_constants.py
+
+- name : Replace tomcat port for Clone TKS
+  replace: dest={{item}} regexp="tkspki_tomcat_port" replace={{tkspki_tomcat_port}}
+  with_items:
+  - /tmp/tks_clone.cfg
+  - /tmp/ansible_constants.py
+
+- name : Replace clone URI port for Clone TKS
+  replace: dest=/tmp/tks_clone.cfg regexp="tkspki_https_port" replace={{tkspki_https_port}}
+
+- name : Replace security domain port for Clone TKS 
+  replace: dest=/tmp/tks_clone.cfg regexp="capki_https_port" replace={{capki_https_port}}
+
+- name: Install TKS clone
+  shell: pkispawn -s TKS -f /tmp/tks_clone.cfg

@@ -1,0 +1,2 @@
+- name: Install TKS master
+  shell: pkispawn -s TKS -f /tmp/test_dir/tks.cfg

@@ -1,0 +1,32 @@
+- name: Replace Clone KRA specific changes 
+  replace: dest={{item}} regexp="krapki_https_port" replace={{krapki_https_port}}
+  with_items:
+  - /tmp/kra_clone.cfg
+  - /tmp/ansible_constants.py
+
+- name: Replace http port for Clone KRA.
+  replace: dest={{item}} regexp="krapki_http_port" replace={{krapki_http_port}}
+  with_items:
+  - /tmp/kra_clone.cfg
+  - /tmp/ansible_constants.py
+
+- name: Replace ajp port for Clone  KRA
+  replace: dest={{item}} regexp="krapki_ajp_port" replace={{krapki_ajp_port}}
+  with_items:
+  - /tmp/kra_clone.cfg
+  - /tmp/ansible_constants.py
+
+- name : Replace tomcat port for Clone KRA
+  replace: dest={{item}} regexp="krapki_tomcat_port" replace={{krapki_tomcat_port}}
+  with_items:
+  - /tmp/kra_clone.cfg
+  - /tmp/ansible_constants.py
+
+- name : Replace security domain port for Clone KRA
+  replace: dest=/tmp/kra_clone.cfg regexp="capki_https_port" replace={{capki_https_port}}
+
+- name : Replace clone URI port for Clone KRA 
+  replace: dest=/tmp/kra_clone.cfg regexp="krapki_https_port" replace={{krapki_https_port}}
+
+- name: Install KRA clone
+  shell: pkispawn -s KRA -f /tmp/kra_clone.cfg

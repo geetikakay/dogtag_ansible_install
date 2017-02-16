@@ -1,0 +1,5 @@
+[idmqe-extras]
+name=idmqe-extras for RHEL
+baseurl=http://cosmos.lab.eng.pnq.redhat.com/idmqe-extras/rhel/$releasever/$basearch/
+enabled=1
+gpgcheck=0

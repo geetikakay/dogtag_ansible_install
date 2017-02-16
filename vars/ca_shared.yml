@@ -1,0 +1,4 @@
+capki_https_port: '8443'
+capki_http_port: '8080'
+capki_ajp_port: '8009'
+capki_tomcat_server_port: '8005'

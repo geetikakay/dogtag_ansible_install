@@ -1,0 +1,3 @@
+- name: Setup DS Service
+  shell: setup-ds.pl --silent --file=/tmp/ldap.cfg
+

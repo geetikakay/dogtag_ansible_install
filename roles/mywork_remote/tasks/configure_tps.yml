@@ -1,0 +1,2 @@
+- name: Install TPS master
+  shell: pkispawn -s TPS -f /tmp/test_dir/tps.cfg

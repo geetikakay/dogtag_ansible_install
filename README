@@ -1,0 +1,126 @@
+README:
+
+-------------
+Project Name:
+-------------
+
+RHCS - Red Hat Certificate System
+
+-----
+About:
+-----
+
+This ansible playbook is written to setup all the subsystems(CA,KRA,OCSP,TKS and TPS).
+These playbooks can setup the environment based on the topology specified in the runtime.
+
+-------------
+Requirements:
+-------------
+
+1. Ansible 2.0+ is needed for running these playbooks.
+2. It can be downloaded from below mentioned ways:
+	 > http://docs.ansible.com/ansible/intro_installation.html
+	 > easy_install pip
+	 > git clone git://github.com/ansible/ansible.git --recursive
+	 > epel
+
+EPEL installation can be easily done from your yum by putting it in the repo directory.
+
+[epel]
+name=Extra Packages for Enterprise Linux 7 - $basearch
+#baseurl=http://download.fedoraproject.org/pub/epel/7/$basearch
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+3. Make sure to check ansible version after installation.This can be quickly done using
+ansible --version
+
+	
+------
+Usage:
+------
+ansible-playbook -i /tmp/test/pki-tests/ci/ansible/host pki.yml --extra-vars "topology=topology-02" -v
+
+InCase, you are required to run any other topology let us say "topology-01" for shared instance, replace topology-02 with topology-01.
+
+
+Topology_01:
+-----------
+
+All the subsystems shared common tomcat instance  and default configuration attributes for installation.
+Default values can be refered from "/etc/pki/default.cfg".
+
+
+Topology_02:
+-----------
+
+LDAP is shared by all subsystems.
+
+About Subsystem Installation:
+
+1. CA ::
+
+Ports Used:
+
+https_port = 20443
+http_port = 20080
+ajp_port = 20009
+tomcat_server_port = 20005
+
+Security Domain:
+
+security_domain_name = topo2_Foobarmaster.org
+
+2. KRA ::
+
+https_port = 21443
+http_port = 21080
+ajp_port = 21009
+tomcat_server_port = 21005
+
+4. TKS ::
+
+https_port = 23443
+http_port = 23080
+ajp_port = 23009
+tomcat_server_port = 23005
+
+5. TPS ::
+
+https_port = 25443
+http_port = 25080
+ajp_port = 25009
+tomcat_server_port = 25005
+
+
+6. LDAP ::
+
+ServerIdentifier = topology-02_testingmaster
+ds_password = Secret123
+ds_ldap_port = 3389
+client_database_password = Secret123
+
+
+References:
+-----------
+
+1. http://docs.ansible.com/ansible/intro.html
+2. http://docs.ansible.com/ansible/intro_installation.html
+
+Executing role user creation tests:
+-----------------------------
+Role user creation has been separated from conftest.py now.
+Role user creation is now in a separate test located in the "test_setup" directory at "cli" directory level.
+
+Once you have setup subsystems using ansible, you can now proceed with role user creation.
+
+In order to execute it run the following command from the test_setup directory:
+py.test --multihost-config=mhc.yaml test_setup/test_create_role_users.py -vs 
+
+Depending on the topology  installed, roles users will be created accordingly.
+For example if we have installed topology 2 through ansible. The, role users
+for discrete instances of CA, KRA, OCSP, TKS and TPS will be created.
+

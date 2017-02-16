@@ -1,0 +1,6 @@
+[fedora-restraint]
+name=Copr repo for restraint owned by bpeck
+baseurl=http://copr-be.cloud.fedoraproject.org/results/bpeck/restraint/fedora-$releasever-$basearch/
+skip_if_unavailable=True
+gpgcheck=0
+enabled=1
